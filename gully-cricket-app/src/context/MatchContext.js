@@ -1,20 +1,46 @@
-import React, { createContext, useState, useEffect } from 'react';
+// src/context/MatchContext.js
+import React, { createContext, useContext, useState } from "react";
 
-export const MatchContext = createContext();
+const MatchContext = createContext();
 
 export const MatchProvider = ({ children }) => {
-  const [match, setMatch] = useState(() => {
-    const saved = localStorage.getItem("match");
-    return saved ? JSON.parse(saved) : null;
+  const [matchCode, setMatchCode] = useState(null);
+  const [matchInfo, setMatchInfo] = useState({
+    homeTeam: "",
+    awayTeam: "",
+    overs: 10,
+    players: 11,
+    rules: {},
+    superOver: true,
+    innings: [],
+    currentInnings: 0,
   });
-
-  useEffect(() => {
-    localStorage.setItem("match", JSON.stringify(match));
-  }, [match]);
+  const [scoreData, setScoreData] = useState({
+    totalRuns: 0,
+    wickets: 0,
+    balls: 0,
+    batters: [],
+    bowlers: [],
+    history: [],
+  });
+  const [host, setHost] = useState(null);
 
   return (
-    <MatchContext.Provider value={{ match, setMatch }}>
+    <MatchContext.Provider
+      value={{
+        matchCode,
+        setMatchCode,
+        matchInfo,
+        setMatchInfo,
+        scoreData,
+        setScoreData,
+        host,
+        setHost,
+      }}
+    >
       {children}
     </MatchContext.Provider>
   );
 };
+
+export const useMatch = () => useContext(MatchContext);
