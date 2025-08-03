@@ -1,17 +1,28 @@
-import React, { useContext } from 'react';
-import { MatchContext } from '../context/MatchContext';
+// src/components/Scoreboard.jsx
+import React from "react";
 
-const Scoreboard = () => {
-  const { match } = useContext(MatchContext);
-  const inning = match.innings[match.currentInning];
+export default function Scoreboard({ scoreData, overs }) {
+  const totalBalls = overs * 6;
+  const ballsRemaining = totalBalls - scoreData.balls;
+  const currentOver = Math.floor(scoreData.balls / 6);
+  const currentBall = scoreData.balls % 6;
+  const runRate = scoreData.balls > 0 ? (scoreData.totalRuns / (scoreData.balls / 6)).toFixed(2) : 0.0;
 
   return (
-    <div className="p-4 bg-gray-100 rounded shadow text-center">
-      <h2 className="text-xl font-bold">{match.teams.team1} vs {match.teams.team2}</h2>
-      <p className="text-3xl font-mono">{inning.score}/{inning.wickets}</p>
-      <p className="text-sm">Overs: {Math.floor(match.currentBall / 6)}.{match.currentBall % 6}</p>
+    <div className="bg-white rounded-xl shadow p-4 text-center space-y-2">
+      <h2 className="text-xl font-bold">🏏 Scoreboard</h2>
+      <p>
+        <strong>Runs:</strong> {scoreData.totalRuns} / {scoreData.wickets}
+      </p>
+      <p>
+        <strong>Overs:</strong> {currentOver}.{currentBall} / {overs}
+      </p>
+      <p>
+        <strong>Run Rate:</strong> {runRate}
+      </p>
+      <p>
+        <strong>Balls Remaining:</strong> {ballsRemaining}
+      </p>
     </div>
   );
-};
-
-export default Scoreboard;
+}
